@@ -1,8 +1,8 @@
+import { AddToCartForm } from "@/components/add-to-cart-form";
 import { ProductLink } from "@/components/ui/product-card";
+import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { AddToCartForm } from "@/components/add-to-cart-form";
-import { Metadata } from "next";
 
 import { getProductDetails, getProductsForSubcategory } from "@/lib/queries";
 // import { db } from "@/db";
@@ -41,6 +41,7 @@ export async function generateMetadata(props: {
   }
 
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE || ""),
     openGraph: { title: product.name, description: product.description },
   };
 }

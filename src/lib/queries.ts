@@ -1,5 +1,4 @@
-import { cookies } from "next/headers";
-import { verifyToken } from "./session";
+import { db } from "@/db";
 import {
   categories,
   products,
@@ -7,10 +6,10 @@ import {
   subcollections,
   users,
 } from "@/db/schema";
-import { db } from "@/db";
-import { eq, and, count } from "drizzle-orm";
+import { and, count, eq, sql } from "drizzle-orm";
+import { cookies } from "next/headers";
+import { verifyToken } from "./session";
 import { unstable_cache } from "./unstable-cache";
-import { sql } from "drizzle-orm";
 
 export async function getUser() {
   const sessionCookie = (await cookies()).get("session");
@@ -225,5 +224,7 @@ export const getSearchResults = unstable_cache(
     return results;
   },
   ["search-results"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  {
+    revalidate: 60 * 60 * 2,
+  }, // two hours
 );

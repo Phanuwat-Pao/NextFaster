@@ -1,9 +1,9 @@
-import { ImageResponse } from "next/og";
-import { notFound } from "next/navigation";
 import { getSubcategory } from "@/lib/queries";
+import { notFound } from "next/navigation";
+import { ImageResponse } from "next/og";
 
 // Route segment config
-export const runtime = "edge";
+// export const runtime = "edge";
 
 // Image metadata
 export const alt = "About the subcategory";

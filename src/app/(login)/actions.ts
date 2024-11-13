@@ -1,13 +1,12 @@
 "use server";
 
-import { z } from "zod";
-import { eq } from "drizzle-orm";
-import { cookies, headers } from "next/headers";
-import { validatedAction } from "@/lib/middleware";
 import { db } from "@/db";
 import { NewUser, users } from "@/db/schema";
+import { validatedAction } from "@/lib/middleware";
 import { comparePasswords, hashPassword, setSession } from "@/lib/session";
-import { authRateLimit, signUpRateLimit } from "@/lib/rate-limit";
+import { eq } from "drizzle-orm";
+import { cookies, headers } from "next/headers";
+import { z } from "zod";
 
 const authSchema = z.object({
   username: z.string().min(1),
@@ -17,15 +16,15 @@ const authSchema = z.object({
 export const signUp = validatedAction(authSchema, async (data) => {
   const { username, password } = data;
   const ip = (await headers()).get("x-real-ip") ?? "local";
-  const rl2 = await signUpRateLimit.limit(ip);
-  if (!rl2.success) {
-    return {
-      error: {
-        code: "AUTH_ERROR",
-        message: "Too many signups. Try again later",
-      },
-    };
-  }
+  // const rl2 = await signUpRateLimit.limit(ip);
+  // if (!rl2.success) {
+  //   return {
+  //     error: {
+  //       code: "AUTH_ERROR",
+  //       message: "Too many signups. Try again later",
+  //     },
+  //   };
+  // }
 
   const existingUser = await db
     .select()
@@ -55,16 +54,16 @@ export const signUp = validatedAction(authSchema, async (data) => {
 export const signIn = validatedAction(authSchema, async (data) => {
   const { username, password } = data;
   const ip = (await headers()).get("x-real-ip") ?? "local";
-  const rl = await authRateLimit.limit(ip);
+  // const rl = await authRateLimit.limit(ip);
 
-  if (!rl.success) {
-    return {
-      error: {
-        code: "AUTH_ERROR",
-        message: "Too many attempts. Try again later",
-      },
-    };
-  }
+  // if (!rl.success) {
+  //   return {
+  //     error: {
+  //       code: "AUTH_ERROR",
+  //       message: "Too many attempts. Try again later",
+  //     },
+  //   };
+  // }
   const user = await db
     .select({
       user: users,

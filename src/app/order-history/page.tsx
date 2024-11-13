@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { OrderHistoryDynamic } from "./dynamic";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE || ""),
   title: "Order History",
 };
 
